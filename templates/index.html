@@ -13,5 +13,8 @@
     <h2><a href="{% url 'author' pk=i.id %}">{{ i.name }}</a></h2>
 {% endfor %}
 <hr>
+{% for i in users %}
+    <h2><a href="{% url 'comments' pk=i.id %}">{% if i.name %}{{ i.name }}{% else %}{{ i.id }}{% endif %}</a></h2>
+{% endfor %}
 </body>
 </html>

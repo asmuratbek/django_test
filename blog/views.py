@@ -2,18 +2,29 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render
 
 # Create your views here.
-from blog.models import Category, Post, Author
+from blog.models import Category, Post, Author, User, Comments
 
 
 def index(request):
     categories = Category.objects.all()
+    cat_list = []
+    print(cat_list)
+    for c in categories:
+        post = Post.objects.filter(category_id=c.id)
+        if post:
+            cat_list.append(c.id)
+    cat = categories.filter(id__in=cat_list)
     authors = Author.objects.all()
+    users = User.objects.all()
     try:
         category_fan = Category.objects.get(title='Фантастика')
     except ObjectDoesNotExist:
         raise ValueError('Такой категори не существует!')
-    return render(request, 'index.html', {'categories': categories,
-                                          'fan': category_fan, 'authors': authors})
+
+    params = {'categories': cat,
+              'fan': category_fan, 'authors': authors,
+              'users': users}
+    return render(request, 'index.html', params)
 
 
 def category(request, pk):
@@ -25,3 +36,7 @@ def author(request, pk):
     posts = Post.objects.filter(author_id=pk)
     params = {'posts': posts}
     return render(request, 'posts_by_author.html', params)
+
+def comments(request, pk):
+    _comments = Comments.objects.filter(user_id=pk)
+    return render(request, 'comments.html', {'comments': _comments})
