@@ -35,7 +35,7 @@ def category(request, pk):
 def author(request, pk):
     posts = Post.objects.filter(author_id=pk)
     params = {'posts': posts}
-    return render(request, 'posts_by_author.html', params)
+    return render(request, 'posts_by_author.html', locals())
 
 def comments(request, pk):
     _comments = Comments.objects.filter(user_id=pk)
