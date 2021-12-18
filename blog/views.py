@@ -8,7 +8,6 @@ from blog.models import Category, Post, Author, User, Comments
 def index(request):
     categories = Category.objects.all()
     cat_list = []
-    print(cat_list)
     for c in categories:
         post = Post.objects.filter(category_id=c.id)
         if post:
@@ -38,5 +37,14 @@ def author(request, pk):
     return render(request, 'posts_by_author.html', locals())
 
 def comments(request, pk):
+    categories = Category.objects.all()
+    cat_list = []
+    for c in categories:
+        post = Post.objects.filter(category_id=c.id)
+        if post:
+            cat_list.append(c.id)
+    cat = categories.filter(id__in=cat_list)
+    authors = Author.objects.all()
+    users = User.objects.all()
     _comments = Comments.objects.filter(user_id=pk)
-    return render(request, 'comments.html', {'comments': _comments})
+    return render(request, 'comments.html', locals())
