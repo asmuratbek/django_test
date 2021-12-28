@@ -1,7 +1,5 @@
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render
-
-# Create your views here.
 from blog.models import Category, Post, Author, User, Comments
 
 
@@ -48,3 +46,5 @@ def comments(request, pk):
     users = User.objects.all()
     _comments = Comments.objects.filter(user_id=pk)
     return render(request, 'comments.html', locals())
+
+
