@@ -47,13 +47,15 @@ def comments(request, pk):
     return render(request, 'comments.html', locals())
 
 def create_ad(request):
-    if request.method == 'POST':
-        form = AdForm(request.POST, request.FILES)
-        if form.is_valid():
-            cd = form.cleaned_data
-            ad = Ad.objects.create(title=cd['title'], description=cd['description'], image=cd['image'], user=request.user)
-            print(ad)
-            return HttpResponse('Ad успешно создан!')
+    if request.user.is_authenticated:
+        if request.method == 'POST':
+            form = AdForm(request.POST, request.FILES)
+            if form.is_valid():
+                cd = form.cleaned_data
+                Ad.objects.create(title=cd['title'], description=cd['description'], image=cd['image'], user=request.user)
+                return HttpResponse('Ad успешно создан!')
+        else:
+            form = AdForm()
     else:
-        form = AdForm()
-    return render(request, 'login.html', {'form': form})
+        return HttpResponse('Вы не авторизованы')
+    return render(request, 'ad.html', {'form': form})
