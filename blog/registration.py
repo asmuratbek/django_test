@@ -1,11 +1,11 @@
 from django.contrib.auth import authenticate, login
-from django.contrib.auth.models import User
 from django.http import HttpResponse
 from django.shortcuts import render
 from blog.forms import LoginForm
+from blog.models import CustomUser
 
 
-def sing_in(request):
+def sign_in(request):
     if request.method == 'POST':
         form = LoginForm(request.POST)
         if form.is_valid():
@@ -28,7 +28,7 @@ def registration(request):
         password = request.POST['password']
         password2 = request.POST['password2']
         if password == password2:
-            user = User.objects.create_user(username=username, email=email, password=password2)
+            user = CustomUser.objects.create_user(username=username, email=email, password=password2)
             return HttpResponse('Пользователь успешно создан!')
         else:
             return HttpResponse('Пароли не совпадают!')

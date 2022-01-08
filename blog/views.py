@@ -1,6 +1,6 @@
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render
-from blog.models import Category, Post, Author, User, Comments
+from blog.models import Category, Post, Author, CustomUser, Comments
 
 
 def index(request):
@@ -12,14 +12,10 @@ def index(request):
             cat_list.append(c.id)
     cat = categories.filter(id__in=cat_list)
     authors = Author.objects.all()
-    users = User.objects.all()
-    try:
-        category_fan = Category.objects.get(title='Фантастика')
-    except ObjectDoesNotExist:
-        raise ValueError('Такой категори не существует!')
+    users = CustomUser.objects.all()
 
     params = {'categories': cat,
-              'fan': category_fan, 'authors': authors,
+              'authors': authors,
               'users': users}
     return render(request, 'index.html', params)
 
@@ -43,7 +39,7 @@ def comments(request, pk):
             cat_list.append(c.id)
     cat = categories.filter(id__in=cat_list)
     authors = Author.objects.all()
-    users = User.objects.all()
+    users = CustomUser.objects.all()
     _comments = Comments.objects.filter(user_id=pk)
     return render(request, 'comments.html', locals())
 
