@@ -1,6 +1,9 @@
 from django.core.exceptions import ObjectDoesNotExist
+from django.http import HttpResponse
 from django.shortcuts import render
-from blog.models import Category, Post, Author, CustomUser, Comments
+
+from blog.forms import AdForm
+from blog.models import Category, Post, Author, CustomUser, Comments, Ad
 
 
 def index(request):
@@ -43,4 +46,14 @@ def comments(request, pk):
     _comments = Comments.objects.filter(user_id=pk)
     return render(request, 'comments.html', locals())
 
-
+def create_ad(request):
+    if request.method == 'POST':
+        form = AdForm(request.POST, request.FILES)
+        if form.is_valid():
+            cd = form.cleaned_data
+            ad = Ad.objects.create(title=cd['title'], description=cd['description'], image=cd['image'], user=request.user)
+            print(ad)
+            return HttpResponse('Ad успешно создан!')
+    else:
+        form = AdForm()
+    return render(request, 'login.html', {'form': form})

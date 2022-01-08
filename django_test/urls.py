@@ -19,7 +19,7 @@ from django.contrib import admin
 from django.urls import path
 
 from blog.registration import registration, sign_in
-from blog.views import index, category, author, comments
+from blog.views import index, category, author, comments, create_ad
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -29,6 +29,7 @@ urlpatterns = [
     path('comments/<int:pk>', comments, name='comments'),
     path('login/', sign_in, name='login'),
     path('registration/', registration, name='reg'),
+    path('create-ad/', create_ad, name='create_ad'),
 
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
